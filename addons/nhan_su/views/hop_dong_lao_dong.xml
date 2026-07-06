@@ -66,11 +66,50 @@
             </field>
         </record>
 
+        <record id="view_hop_dong_lao_dong_kanban" model="ir.ui.view">
+            <field name="name">hop_dong_lao_dong.kanban</field>
+            <field name="model">hop_dong_lao_dong</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trang_thai" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="loai_hop_dong"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="luong_co_ban"/>
+                    <field name="trang_thai"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title" style="font-size: 1.1em; color: #1e3a8a;">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div style="margin-top: 5px; color: #475569;">
+                                        <strong>Nhân viên:</strong> <field name="nhan_vien_id"/>
+                                    </div>
+                                    <div style="color: #475569;">
+                                        <strong>Loại:</strong> <field name="loai_hop_dong"/>
+                                    </div>
+                                    <div style="color: #475569;">
+                                        <strong>Thời gian:</strong> <field name="ngay_bat_dau"/> - <field name="ngay_ket_thuc"/>
+                                    </div>
+                                    <div style="margin-top: 5px; font-weight: bold; color: #0f172a;">
+                                        <strong>Lương CB:</strong> <field name="luong_co_ban"/> VND
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <!-- Action -->
         <record id="action_hop_dong_lao_dong" model="ir.actions.act_window">
             <field name="name">Hợp đồng Lao động</field>
             <field name="res_model">hop_dong_lao_dong</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Tạo hợp đồng lao động đầu tiên cho nhân viên!

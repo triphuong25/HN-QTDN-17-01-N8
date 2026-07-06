@@ -34,10 +34,23 @@
         </field>
     </record>
 
+    <record id="view_cham_cong_hang_ngay_calendar" model="ir.ui.view">
+        <field name="name">cham_cong_hang_ngay.calendar</field>
+        <field name="model">cham_cong_hang_ngay</field>
+        <field name="arch" type="xml">
+            <calendar string="Chấm công hàng ngày" date_start="ngay" color="trang_thai" quick_add="false">
+                <field name="nhan_vien_id"/>
+                <field name="trang_thai"/>
+                <field name="gio_check_in" widget="float_time"/>
+                <field name="gio_check_out" widget="float_time"/>
+            </calendar>
+        </field>
+    </record>
+
     <record id="action_cham_cong_hang_ngay" model="ir.actions.act_window">
         <field name="name">Chấm công hàng ngày</field>
         <field name="res_model">cham_cong_hang_ngay</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">tree,calendar</field>
         <field name="search_view_id" ref="view_cham_cong_hang_ngay_search"/>
     </record>
 </odoo>
