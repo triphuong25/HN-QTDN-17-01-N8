@@ -180,6 +180,20 @@
         </field>
     </record>
 
+    <!-- Inherit Employee Form to add Payslip Smart Button -->
+    <record id="view_nhan_vien_form_inherit_payslip" model="ir.ui.view">
+        <field name="name">nhan_vien.form.inherit.payslip</field>
+        <field name="model">nhan_vien</field>
+        <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_payslips" type="object" class="oe_stat_button" icon="fa-money">
+                    <field name="payslip_count" string="Phiếu lương" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
     <record id="action_phieu_luong" model="ir.actions.act_window">
         <field name="name">Phiếu lương nhân viên</field>
         <field name="res_model">phieu_luong</field>

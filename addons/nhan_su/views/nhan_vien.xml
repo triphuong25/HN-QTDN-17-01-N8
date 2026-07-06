@@ -7,7 +7,12 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <div class="oe_read_only" style="font-size:25px">Nhân viên</div>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_contracts" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                                <field name="contract_count" string="Hợp đồng" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_read_only" style="font-size:25px; margin-top: 10px;">Nhân viên</div>
                         <group col="4" string="Thông tin chung">
                             <field name="ho_ten_dem"/>
                             <field name="ten"/>

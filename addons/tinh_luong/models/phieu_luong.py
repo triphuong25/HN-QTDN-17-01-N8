@@ -163,3 +163,25 @@ class PhieuLuongLine(models.Model):
         ('thu_nhap', 'Thu nhập (+)'),
         ('khau_tru', 'Khấu trừ (-)')
     ], string="Loại", required=True)
+
+
+class NhanVienInherit(models.Model):
+    _inherit = 'nhan_vien'
+
+    payslip_count = fields.Integer(string="Số phiếu lương", compute="_compute_payslip_count")
+
+    def _compute_payslip_count(self):
+        for record in self:
+            payslips = self.env['phieu_luong'].search([('nhan_vien_id', '=', record.id)])
+            record.payslip_count = len(payslips)
+
+    def action_view_payslips(self):
+        self.ensure_one()
+        return {
+            'name': 'Phiếu lương nhân viên',
+            'type': 'ir.actions.act_window',
+            'res_model': 'phieu_luong',
+            'view_mode': 'tree,form',
+            'domain': [('nhan_vien_id', '=', self.id)],
+            'context': {'default_nhan_vien_id': self.id},
+        }

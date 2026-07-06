@@ -42,6 +42,7 @@ class NhanVien(models.Model):
     phu_thuoc_ids = fields.One2many("nhan_vien_phu_thuoc", "nhan_vien_id", string="Danh sách người phụ thuộc")
     so_nguoi_phu_thuoc = fields.Integer(string="Số người phụ thuộc", compute="_compute_so_nguoi_phu_thuoc", store=True, default=0)
     hop_dong_ids = fields.One2many("hop_dong_lao_dong", "nhan_vien_id", string="Danh sách hợp đồng")
+    contract_count = fields.Integer(string="Số hợp đồng", compute="_compute_contract_count")
     
     @api.depends('hop_dong_ids.trang_thai', 'hop_dong_ids.luong_co_ban', 'hop_dong_ids.phu_cap', 'hop_dong_ids.he_so_bao_hiem')
     def _compute_active_contract_details(self):
@@ -106,6 +107,21 @@ class NhanVien(models.Model):
         for record in self:
             active_dependents = record.phu_thuoc_ids.filtered(lambda d: d.trang_thai == 'hieu_luc')
             record.so_nguoi_phu_thuoc = len(active_dependents)
+
+    def _compute_contract_count(self):
+        for record in self:
+            record.contract_count = len(record.hop_dong_ids)
+
+    def action_view_contracts(self):
+        self.ensure_one()
+        return {
+            'name': 'Hợp đồng lao động',
+            'type': 'ir.actions.act_window',
+            'res_model': 'hop_dong_lao_dong',
+            'view_mode': 'kanban,tree,form',
+            'domain': [('nhan_vien_id', '=', self.id)],
+            'context': {'default_nhan_vien_id': self.id},
+        }
 
 
 class NhanVienPhuThuoc(models.Model):
