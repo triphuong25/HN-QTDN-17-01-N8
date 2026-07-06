@@ -92,7 +92,8 @@ class ChotCongThang(models.Model):
                         'so_gio_ot': data['ot'],
                         'luong_co_ban': emp.luong_co_ban or 0.0,
                         'phu_cap': emp.phu_cap or 0.0,
-                        'muc_dong_bao_hiem': emp.he_so_bao_hiem or 0.0
+                        'muc_dong_bao_hiem': emp.he_so_bao_hiem or 0.0,
+                        'so_nguoi_phu_thuoc': emp.so_nguoi_phu_thuoc or 0
                     })
                 else:
                     PhieuLuongObj.create({
@@ -105,6 +106,7 @@ class ChotCongThang(models.Model):
                         'luong_co_ban': emp.luong_co_ban or 0.0,
                         'phu_cap': emp.phu_cap or 0.0,
                         'muc_dong_bao_hiem': emp.he_so_bao_hiem or 0.0,
+                        'so_nguoi_phu_thuoc': emp.so_nguoi_phu_thuoc or 0,
                         'state': 'draft'
                     })
             

@@ -28,6 +28,14 @@ class PhieuLuong(models.Model):
     tien_bhyt = fields.Float(string="Khấu trừ BHYT", compute="_compute_luong_chi_tiet", store=True)
     tien_bhtn = fields.Float(string="Khấu trừ BHTN", compute="_compute_luong_chi_tiet", store=True)
     tong_khau_tru = fields.Float(string="Tổng khấu trừ BH", compute="_compute_luong_chi_tiet", store=True)
+    
+    # PIT fields
+    giam_tru_ban_than = fields.Float(string="Giảm trừ gia cảnh bản thân (VND)", default=11000000.0)
+    so_nguoi_phu_thuoc = fields.Integer(string="Số người phụ thuộc", readonly=True)
+    giam_tru_phu_thuoc = fields.Float(string="Giảm trừ người phụ thuộc (VND)", compute="_compute_luong_chi_tiet", store=True)
+    thu_nhap_chiu_thue = fields.Float(string="Thu nhập tính thuế TNCN (VND)", compute="_compute_luong_chi_tiet", store=True)
+    thue_tncn = fields.Float(string="Thuế TNCN phải nộp (VND)", compute="_compute_luong_chi_tiet", store=True)
+    
     thuc_linh = fields.Float(string="Thực lĩnh", compute="_compute_luong_chi_tiet", store=True)
     
     state = fields.Selection([
@@ -37,6 +45,7 @@ class PhieuLuong(models.Model):
     ], string="Trạng thái", default='draft')
     
     display_name = fields.Char(string="Tên phiếu lương", compute="_compute_display_name")
+    line_ids = fields.One2many('phieu_luong_line', 'phieu_luong_id', string="Chi tiết các dòng lương", compute="_compute_luong_chi_tiet", store=True)
 
     @api.depends('nhan_vien_id', 'thang', 'nam')
     def _compute_display_name(self):
@@ -44,19 +53,18 @@ class PhieuLuong(models.Model):
             name = record.nhan_vien_id.ho_va_ten or "Nhân viên"
             record.display_name = f"Phiếu lương {name} - {record.thang}/{record.nam}"
 
-    @api.depends('ngay_cong_chuan', 'ngay_cong_thuc_te', 'so_gio_ot', 'luong_co_ban', 'phu_cap', 'muc_dong_bao_hiem')
+    @api.depends('ngay_cong_chuan', 'ngay_cong_thuc_te', 'so_gio_ot', 'luong_co_ban', 'phu_cap', 'muc_dong_bao_hiem', 'giam_tru_ban_than', 'so_nguoi_phu_thuoc')
     def _compute_luong_chi_tiet(self):
         for record in self:
-            # 1. Real salary
+            # 1. Lương thực tế & Lương OT
             if record.ngay_cong_chuan > 0:
                 record.luong_thuc_te = (record.luong_co_ban / record.ngay_cong_chuan) * record.ngay_cong_thuc_te
-                # Overtime salary (1.5x hourly rate)
                 record.luong_ot = (record.luong_co_ban / record.ngay_cong_chuan / 8.0) * record.so_gio_ot * 1.5
             else:
                 record.luong_thuc_te = 0.0
                 record.luong_ot = 0.0
                 
-            # 2. Insurance deductions
+            # 2. Khấu trừ bảo hiểm
             emp = record.nhan_vien_id
             pct_bhxh = emp.ty_le_bhxh if emp else 8.0
             pct_bhyt = emp.ty_le_bhyt if emp else 1.5
@@ -67,11 +75,70 @@ class PhieuLuong(models.Model):
             record.tien_bhtn = record.muc_dong_bao_hiem * (pct_bhtn / 100.0)
             record.tong_khau_tru = record.tien_bhxh + record.tien_bhyt + record.tien_bhtn
             
-            # 3. Take-home pay
-            record.thuc_linh = record.luong_thuc_te + record.luong_ot + record.phu_cap - record.tong_khau_tru
+            # 3. Tính thuế TNCN (Lũy tiến Việt Nam)
+            # Tổng thu nhập = Lương thực tế + Phụ cấp + Lương OT
+            tong_thu_nhap = record.luong_thuc_te + record.phu_cap + record.luong_ot
+            
+            # Giảm trừ phụ thuộc = Số người phụ thuộc * 4.400.000 VND
+            record.giam_tru_phu_thuoc = record.so_nguoi_phu_thuoc * 4400000.0
+            
+            # Thu nhập tính thuế = Tổng thu nhập - Bảo hiểm - Giảm trừ bản thân - Giảm trừ phụ thuộc
+            tntt = tong_thu_nhap - record.tong_khau_tru - record.giam_tru_ban_than - record.giam_tru_phu_thuoc
+            record.thu_nhap_chiu_thue = max(0.0, tntt)
+            
+            # Tính thuế TNCN lũy tiến
+            record.thue_tncn = record._calculate_progressive_pit(record.thu_nhap_chiu_thue)
+            
+            # 4. Thực lĩnh
+            record.thuc_linh = tong_thu_nhap - record.tong_khau_tru - record.thue_tncn
+
+            # 5. Sinh dòng chi tiết lương (Payslip Lines)
+            lines_vals = [
+                (5, 0, 0),  # Xóa toàn bộ dòng cũ
+                (0, 0, {'name': 'Lương thực tế', 'code': 'BASIC_REAL', 'amount': record.luong_thuc_te, 'type': 'thu_nhap'}),
+                (0, 0, {'name': 'Lương làm thêm (OT)', 'code': 'OT', 'amount': record.luong_ot, 'type': 'thu_nhap'}),
+                (0, 0, {'name': 'Phụ cấp cố định', 'code': 'ALW', 'amount': record.phu_cap, 'type': 'thu_nhap'}),
+                (0, 0, {'name': 'Bảo hiểm Xã hội (BHXH)', 'code': 'SI', 'amount': record.tien_bhxh, 'type': 'khau_tru'}),
+                (0, 0, {'name': 'Bảo hiểm Y tế (BHYT)', 'code': 'HI', 'amount': record.tien_bhyt, 'type': 'khau_tru'}),
+                (0, 0, {'name': 'Bảo hiểm Thất nghiệp (BHTN)', 'code': 'UI', 'amount': record.tien_bhtn, 'type': 'khau_tru'}),
+                (0, 0, {'name': 'Thuế thu nhập cá nhân (TNCN)', 'code': 'PIT', 'amount': record.thue_tncn, 'type': 'khau_tru'}),
+            ]
+            record.line_ids = lines_vals
+
+    def _calculate_progressive_pit(self, tntt):
+        if tntt <= 0:
+            return 0.0
+        if tntt <= 5000000:
+            return tntt * 0.05
+        elif tntt <= 10000000:
+            return tntt * 0.10 - 250000
+        elif tntt <= 18000000:
+            return tntt * 0.15 - 750000
+        elif tntt <= 32000000:
+            return tntt * 0.20 - 1650000
+        elif tntt <= 52000000:
+            return tntt * 0.25 - 3250000
+        elif tntt <= 80000000:
+            return tntt * 0.30 - 5850000
+        else:
+            return tntt * 0.35 - 9850000
 
     def action_approve(self):
         self.write({'state': 'approved'})
 
     def action_pay(self):
         self.write({'state': 'paid'})
+
+
+class PhieuLuongLine(models.Model):
+    _name = 'phieu_luong_line'
+    _description = 'Chi tiết Dòng Phiếu lương'
+
+    phieu_luong_id = fields.Many2one('phieu_luong', string="Phiếu lương", ondelete='cascade')
+    name = fields.Char(string="Tên khoản mục", required=True)
+    code = fields.Char(string="Mã khoản mục", required=True)
+    amount = fields.Float(string="Số tiền (VND)", default=0.0)
+    type = fields.Selection([
+        ('thu_nhap', 'Thu nhập (+)'),
+        ('khau_tru', 'Khấu trừ (-)')
+    ], string="Loại", required=True)

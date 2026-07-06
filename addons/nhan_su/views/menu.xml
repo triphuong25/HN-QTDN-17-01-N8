@@ -13,6 +13,13 @@
             action="action_nhan_vien"
         />
 
+        <menuitem name="Hợp đồng lao động" 
+            id="menu_hop_dong_lao_dong" 
+            parent="menu_root" 
+            sequence="2"
+            action="action_hop_dong_lao_dong"
+        />
+
         <menuitem name="Danh mục chung" 
             id="menu_danh_muc_chung" 
             parent="menu_root" 

@@ -7,6 +7,10 @@
             <tree editable="top">
                 <field name="nhan_vien_id"/>
                 <field name="ngay"/>
+                <field name="gio_check_in" widget="float_time"/>
+                <field name="gio_check_out" widget="float_time"/>
+                <field name="phut_di_muon"/>
+                <field name="phut_ve_som"/>
                 <field name="trang_thai"/>
                 <field name="so_gio_ot"/>
                 <field name="ghi_chu"/>

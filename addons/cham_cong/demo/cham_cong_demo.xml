@@ -5,19 +5,22 @@
         <record id="demo_attendance_a_1" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
             <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
-            <field name="trang_thai">di_lam</field>
+            <field name="gio_check_in">8.0</field>
+            <field name="gio_check_out">19.0</field>
             <field name="so_gio_ot">2.0</field>
         </record>
         <record id="demo_attendance_a_2" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
             <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
-            <field name="trang_thai">di_lam</field>
+            <field name="gio_check_in">8.0</field>
+            <field name="gio_check_out">17.0</field>
             <field name="so_gio_ot">0.0</field>
         </record>
         <record id="demo_attendance_a_3" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
             <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
-            <field name="trang_thai">di_lam</field>
+            <field name="gio_check_in">8.25</field> <!-- 8:15 (15m late) -->
+            <field name="gio_check_out">18.5</field> <!-- 18:30 -->
             <field name="so_gio_ot">1.5</field>
         </record>
 
@@ -25,18 +28,22 @@
         <record id="demo_attendance_b_1" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
             <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
-            <field name="trang_thai">di_lam</field>
+            <field name="gio_check_in">8.0</field>
+            <field name="gio_check_out">17.0</field>
             <field name="so_gio_ot">0.0</field>
         </record>
         <record id="demo_attendance_b_2" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
             <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
-            <field name="trang_thai">nua_ngay</field>
+            <field name="gio_check_in">8.0</field>
+            <field name="gio_check_out">12.0</field> <!-- Half day -->
             <field name="so_gio_ot">0.0</field>
         </record>
         <record id="demo_attendance_b_3" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
             <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
+            <field name="gio_check_in">0.0</field>
+            <field name="gio_check_out">0.0</field>
             <field name="trang_thai">nghi_co_luong</field>
             <field name="so_gio_ot">0.0</field>
         </record>
@@ -45,18 +52,23 @@
         <record id="demo_attendance_c_1" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
             <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
-            <field name="trang_thai">di_lam</field>
+            <field name="gio_check_in">8.0</field>
+            <field name="gio_check_out">17.0</field>
             <field name="so_gio_ot">0.0</field>
         </record>
         <record id="demo_attendance_c_2" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
             <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="gio_check_in">0.0</field>
+            <field name="gio_check_out">0.0</field>
             <field name="trang_thai">nghi_khong_luong</field>
             <field name="so_gio_ot">0.0</field>
         </record>
         <record id="demo_attendance_c_3" model="cham_cong_hang_ngay">
             <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
             <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
+            <field name="gio_check_in">0.0</field>
+            <field name="gio_check_out">0.0</field>
             <field name="trang_thai">vang_mat</field>
             <field name="so_gio_ot">0.0</field>
         </record>

@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_phieu_luong,access_phieu_luong,model_phieu_luong,,1,1,1,1
+access_phieu_luong_line,access_phieu_luong_line,model_phieu_luong_line,,1,1,1,1
+

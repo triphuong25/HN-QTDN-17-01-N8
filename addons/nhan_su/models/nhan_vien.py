@@ -33,13 +33,29 @@ class NhanVien(models.Model):
                                         compute="so_nguoi_bang_tuoi",
                                         store=True
                                         )
-    luong_co_ban = fields.Float(string="Lương cơ bản (VND)")
-    phu_cap = fields.Float(string="Phụ cấp cố định (VND)")
-    he_so_bao_hiem = fields.Float(string="Mức đóng bảo hiểm (VND)")
+    luong_co_ban = fields.Float(string="Lương cơ bản (VND)", compute="_compute_active_contract_details", store=True)
+    phu_cap = fields.Float(string="Phụ cấp cố định (VND)", compute="_compute_active_contract_details", store=True)
+    he_so_bao_hiem = fields.Float(string="Mức đóng bảo hiểm (VND)", compute="_compute_active_contract_details", store=True)
     ty_le_bhxh = fields.Float(string="Tỷ lệ đóng BHXH (%)", default=8.0)
     ty_le_bhyt = fields.Float(string="Tỷ lệ đóng BHYT (%)", default=1.5)
     ty_le_bhtn = fields.Float(string="Tỷ lệ đóng BHTN (%)", default=1.0)
+    so_nguoi_phu_thuoc = fields.Integer(string="Số người phụ thuộc", default=0)
+    hop_dong_ids = fields.One2many("hop_dong_lao_dong", "nhan_vien_id", string="Danh sách hợp đồng")
     
+    @api.depends('hop_dong_ids.trang_thai', 'hop_dong_ids.luong_co_ban', 'hop_dong_ids.phu_cap', 'hop_dong_ids.he_so_bao_hiem')
+    def _compute_active_contract_details(self):
+        for record in self:
+            active_contract = record.hop_dong_ids.filtered(lambda c: c.trang_thai == 'hieu_luc')
+            if active_contract:
+                c = active_contract[0]
+                record.luong_co_ban = c.luong_co_ban
+                record.phu_cap = c.phu_cap
+                record.he_so_bao_hiem = c.he_so_bao_hiem
+            else:
+                record.luong_co_ban = 0.0
+                record.phu_cap = 0.0
+                record.he_so_bao_hiem = 0.0
+
     @api.depends("tuoi")
     def _compute_so_nguoi_bang_tuoi(self):
         for record in self:

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_hop_dong_lao_dong_tree" model="ir.ui.view">
+            <field name="name">hop.dong.lao.dong.tree</field>
+            <field name="model">hop_dong_lao_dong</field>
+            <field name="arch" type="xml">
+                <tree string="Hợp đồng Lao động">
+                    <field name="name"/>
+                    <field name="nhan_vien_id"/>
+                    <field name="loai_hop_dong"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="luong_co_ban" sum="Tổng lương cơ bản"/>
+                    <field name="phu_cap" sum="Tổng phụ cấp"/>
+                    <field name="trang_thai"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_hop_dong_lao_dong_form" model="ir.ui.view">
+            <field name="name">hop.dong.lao.dong.form</field>
+            <field name="model">hop_dong_lao_dong</field>
+            <field name="arch" type="xml">
+                <form string="Hợp đồng Lao động">
+                    <header>
+                        <button name="action_confirm" string="Kích hoạt hiệu lực" type="object" class="oe_highlight" states="nhap"/>
+                        <button name="action_draft" string="Đặt lại nháp" type="object" states="het_han,hieu_luc"/>
+                        <button name="action_expire" string="Kết thúc hiệu lực" type="object" states="hieu_luc"/>
+                        <field name="trang_thai" widget="statusbar" statusbar_visible="nhap,hieu_luc,het_han"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Số hợp đồng (ví dụ: HĐLD-2026-001)"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="nhan_vien_id"/>
+                                <field name="loai_hop_dong"/>
+                            </group>
+                            <group>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Chi tiết Lương &amp; Phúc lợi">
+                                <group>
+                                    <field name="luong_co_ban"/>
+                                    <field name="phu_cap"/>
+                                    <field name="he_so_bao_hiem"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_hop_dong_lao_dong" model="ir.actions.act_window">
+            <field name="name">Hợp đồng Lao động</field>
+            <field name="res_model">hop_dong_lao_dong</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo hợp đồng lao động đầu tiên cho nhân viên!
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

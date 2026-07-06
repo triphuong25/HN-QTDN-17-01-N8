@@ -29,17 +29,31 @@
                             </page>
                             <page string="Lương &amp; Bảo hiểm">
                                 <group col="2">
-                                    <group string="Thông tin Lương">
-                                        <field name="luong_co_ban"/>
-                                        <field name="phu_cap"/>
+                                    <group string="Thông tin Lương (Lấy từ HĐ hiệu lực)">
+                                        <field name="luong_co_ban" readonly="1"/>
+                                        <field name="phu_cap" readonly="1"/>
                                     </group>
                                     <group string="Thông tin Bảo hiểm">
-                                        <field name="he_so_bao_hiem"/>
+                                        <field name="he_so_bao_hiem" readonly="1"/>
                                         <field name="ty_le_bhxh"/>
                                         <field name="ty_le_bhyt"/>
                                         <field name="ty_le_bhtn"/>
+                                        <field name="so_nguoi_phu_thuoc"/>
                                     </group>
                                 </group>
+                            </page>
+                            <page string="Hợp đồng Lao động">
+                                <field name="hop_dong_ids" context="{'default_nhan_vien_id': active_id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="loai_hop_dong"/>
+                                        <field name="ngay_bat_dau"/>
+                                        <field name="ngay_ket_thuc"/>
+                                        <field name="luong_co_ban"/>
+                                        <field name="phu_cap"/>
+                                        <field name="trang_thai"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
                     </sheet>

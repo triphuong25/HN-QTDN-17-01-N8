@@ -62,10 +62,27 @@
                                     <field name="tien_bhtn"/>
                                     <field name="tong_khau_tru" style="font-weight: bold;"/>
                                 </group>
+                                <group string="Thuế &amp; Giảm trừ gia cảnh">
+                                    <field name="giam_tru_ban_than"/>
+                                    <field name="so_nguoi_phu_thuoc"/>
+                                    <field name="giam_tru_phu_thuoc"/>
+                                    <field name="thu_nhap_chiu_thue"/>
+                                    <field name="thue_tncn" style="font-weight: bold; color: red;"/>
+                                </group>
                             </group>
                             <group class="oe_subtotal_footer oe_right">
                                 <field name="thuc_linh" class="oe_subtotal_footer_separator" style="font-size: 1.5em; font-weight: bold;"/>
                             </group>
+                        </page>
+                        <page string="Bảng chi tiết dòng lương">
+                            <field name="line_ids" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="amount" sum="Tổng tiền"/>
+                                    <field name="type"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
