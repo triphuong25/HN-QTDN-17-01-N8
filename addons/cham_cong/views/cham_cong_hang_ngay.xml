@@ -9,10 +9,15 @@
                 <field name="ngay"/>
                 <field name="gio_check_in" widget="float_time"/>
                 <field name="gio_check_out" widget="float_time"/>
-                <field name="phut_di_muon"/>
-                <field name="phut_ve_som"/>
-                <field name="trang_thai"/>
-                <field name="so_gio_ot"/>
+                <field name="phut_di_muon" decoration-danger="phut_di_muon &gt; 0"/>
+                <field name="phut_ve_som" decoration-danger="phut_ve_som &gt; 0"/>
+                <field name="trang_thai" widget="badge" 
+                       decoration-success="trang_thai == 'di_lam'" 
+                       decoration-warning="trang_thai == 'nua_ngay'" 
+                       decoration-info="trang_thai == 'nghi_co_luong'" 
+                       decoration-danger="trang_thai == 'nghi_khong_luong'" 
+                       decoration-muted="trang_thai == 'vang_mat'"/>
+                <field name="so_gio_ot" sum="Tổng giờ làm thêm"/>
                 <field name="ghi_chu"/>
             </tree>
         </field>

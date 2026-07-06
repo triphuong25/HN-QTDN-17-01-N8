@@ -9,11 +9,14 @@
                 <field name="nhan_vien_id"/>
                 <field name="thang"/>
                 <field name="nam"/>
-                <field name="luong_thuc_te"/>
-                <field name="luong_ot"/>
-                <field name="tong_khau_tru"/>
-                <field name="thuc_linh"/>
-                <field name="state"/>
+                <field name="luong_thuc_te" sum="Tổng lương thực tế"/>
+                <field name="luong_ot" sum="Tổng lương OT"/>
+                <field name="tong_khau_tru" sum="Tổng khấu trừ"/>
+                <field name="thuc_linh" sum="Tổng thực lĩnh"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'approved'"
+                       decoration-success="state == 'paid'"/>
             </tree>
         </field>
     </record>
@@ -76,11 +79,13 @@
                         </page>
                         <page string="Bảng chi tiết dòng lương">
                             <field name="line_ids" readonly="1">
-                                <tree>
+                                <tree decoration-success="type == 'thu_nhap'" decoration-danger="type == 'khau_tru'">
                                     <field name="name"/>
                                     <field name="code"/>
-                                    <field name="amount" sum="Tổng tiền"/>
-                                    <field name="type"/>
+                                    <field name="amount" sum="Tổng cộng"/>
+                                    <field name="type" widget="badge"
+                                           decoration-success="type == 'thu_nhap'"
+                                           decoration-danger="type == 'khau_tru'"/>
                                 </tree>
                             </field>
                         </page>

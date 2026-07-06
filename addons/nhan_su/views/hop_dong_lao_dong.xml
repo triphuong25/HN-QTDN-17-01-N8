@@ -9,12 +9,17 @@
                 <tree string="Hợp đồng Lao động">
                     <field name="name"/>
                     <field name="nhan_vien_id"/>
-                    <field name="loai_hop_dong"/>
+                    <field name="loai_hop_dong" widget="badge"
+                           decoration-info="loai_hop_dong == 'thu_viec'"
+                           decoration-success="loai_hop_dong == 'chinh_thuc'"/>
                     <field name="ngay_bat_dau"/>
                     <field name="ngay_ket_thuc"/>
                     <field name="luong_co_ban" sum="Tổng lương cơ bản"/>
                     <field name="phu_cap" sum="Tổng phụ cấp"/>
-                    <field name="trang_thai"/>
+                    <field name="trang_thai" widget="badge"
+                           decoration-muted="trang_thai == 'nhap'"
+                           decoration-success="trang_thai == 'hieu_luc'"
+                           decoration-danger="trang_thai == 'het_han'"/>
                 </tree>
             </field>
         </record>
