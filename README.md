@@ -94,15 +94,36 @@ python3 odoo-bin.py -c odoo.conf -u all
 ```
 Người sử dụng truy cập theo đường dẫn _http://localhost:8069/_ để đăng nhập vào hệ thống.
 
-## 📝 5. Đề tài: Chấm công & Tính lương tự động (Nhóm 08)
+## 📝 5. Đề tài: Chấm công & Tính lương tự động - Nhóm 08 (K15)
 
-Hệ thống quản lý Chấm công và Tính lương tích hợp trực tiếp với module Quản lý nhân sự (HRM).
+Hệ thống ERP quản lý HRM - Chấm công - Tính lương tự động hóa cấp doanh nghiệp được xây dựng trên nền tảng Odoo 15.
 
-### 5.1. Mô tả luồng nghiệp vụ tự động hóa (Mức 2)
-* Dữ liệu nhân sự mẫu được lưu gốc tại module HRM (`nhan_su`), lưu cấu hình lương cơ bản, phụ cấp và bảo hiểm.
-* Dữ liệu chấm công hàng ngày được ghi nhận tại module Chấm công (`cham_cong`).
-* Khi nhấn nút **"Chốt công tháng"** bên module Chấm công, hệ thống tự động tổng hợp số ngày đi làm, số giờ tăng ca (OT) của từng nhân viên và tạo các bản ghi phiếu lương tương ứng dạng Nháp (Draft) bên module Tính lương (`tinh_luong`).
-* Sơ đồ luồng nghiệp vụ chi tiết dạng Swimlane BPMN: [Nhom08_BusinessFlow_ChamCongTinhLuong.svg](./docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg).
+### 5.1. Mô tả tính năng và nghiệp vụ chuyên sâu đã thực hiện
+*   **Quản lý Hợp đồng Lao động (HRM):**
+    *   Tích hợp thực thể Hợp đồng lao động để quản lý loại hợp đồng, lương cơ bản, phụ cấp và mức đóng bảo hiểm.
+    *   Lương và phụ cấp của nhân viên được tính toán tự động và động từ Hợp đồng đang có hiệu lực, loại bỏ nhập tĩnh.
+    *   Quản lý lịch sử hợp đồng trực tiếp tại tab hồ sơ nhân viên.
+*   **Chấm công Check-in/Check-out & Giờ làm việc thực tế:**
+    *   Quản lý giờ vào (`gio_check_in`), giờ ra (`gio_check_out`) thực tế của nhân viên.
+    *   Tự động tính số phút đi muộn (so với mốc 08:00) và về sớm (so với mốc 17:00).
+    *   Quy đổi ngày công tự động dựa trên số giờ làm việc thực tế (trừ 1 tiếng nghỉ trưa).
+*   **Phân rã OT theo chuẩn Luật Lao động:**
+    *   Tự động phân biệt ngày chấm công làm thêm là ngày thường hay cuối tuần (Thứ 7, Chủ Nhật) dựa theo lịch Gregory.
+    *   Tách biệt và nhân hệ số tương ứng: **OT ngày thường (150%)** và **OT cuối tuần (200%)**, tự động hiển thị chi tiết trên dòng lương.
+*   **Tính lương & Thuế TNCN lũy tiến từng phần:**
+    *   Áp dụng biểu thuế TNCN lũy tiến từng phần chuẩn Việt Nam (từ 5% đến 35%).
+    *   Tự động giảm trừ gia cảnh bản thân (11 triệu/tháng) và người phụ thuộc (4.4 triệu/người/tháng lấy động từ hồ sơ HRM).
+    *   Tạo bảng kê phân rã dòng lương chi tiết (Lương thực tế, OT thường, OT cuối tuần, phụ cấp, các khoản khấu trừ bảo hiểm BHXH/BHYT/BHTN, và Thuế TNCN).
+
+### 5.2. Các chế độ hiển thị và Báo cáo trực quan (UI/UX)
+*   **Giao diện dạng thẻ (Kanban View):** Dành cho hồ sơ Nhân viên (có ảnh chân dung), danh sách Hợp đồng và Phiếu lương nhóm theo trạng thái xử lý.
+*   **Giao diện dạng Lịch (Calendar View):** Trực quan hóa nhật ký chấm công hàng ngày của nhân viên trên lịch tháng có phân màu trạng thái đi làm, nghỉ phép.
+*   **Báo cáo phân tích đa chiều (Pivot & Graph Dashboard):** Cung cấp bảng phân tích động Pivot kéo thả dữ liệu và biểu đồ cột Graph so sánh trực quan cơ cấu lương thực lĩnh, bảo hiểm và thuế TNCN của nhân viên.
+*   **Tô màu dòng chi tiết phiếu lương:** Nhận diện màu sắc trực quan (Xanh lá cho các khoản thu nhập cộng thêm và Đỏ/Cam cho các khoản khấu trừ bảo hiểm, thuế).
+
+### 5.3. Tài liệu liên quan
+*   Sơ đồ luồng nghiệp vụ chi tiết dạng Swimlane BPMN: [Nhom08_BusinessFlow_ChamCongTinhLuong.svg](./docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg).
+*   Báo cáo chi tiết và hướng dẫn sử dụng giao diện: [walkthrough.md](file:///C:/Users/nguye/.gemini/antigravity-ide/brain/8e9e1401-ec84-4b0c-9354-eef08b606ef6/walkthrough.md).
 
 ## 📝 6. License
 
