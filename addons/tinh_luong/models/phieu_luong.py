@@ -17,6 +17,8 @@ class PhieuLuong(models.Model):
     ngay_cong_chuan = fields.Integer(string="Số ngày công chuẩn", readonly=True)
     ngay_cong_thuc_te = fields.Float(string="Số ngày công thực tế", readonly=True)
     so_gio_ot = fields.Float(string="Số giờ OT thực tế", readonly=True)
+    so_gio_ot_thuong = fields.Float(string="Giờ OT ngày thường", readonly=True, default=0.0)
+    so_gio_ot_cuoi_tuan = fields.Float(string="Giờ OT cuối tuần", readonly=True, default=0.0)
     
     luong_co_ban = fields.Float(string="Lương cơ bản gốc", readonly=True)
     phu_cap = fields.Float(string="Phụ cấp cố định", readonly=True)
@@ -53,16 +55,20 @@ class PhieuLuong(models.Model):
             name = record.nhan_vien_id.ho_va_ten or "Nhân viên"
             record.display_name = f"Phiếu lương {name} - {record.thang}/{record.nam}"
 
-    @api.depends('ngay_cong_chuan', 'ngay_cong_thuc_te', 'so_gio_ot', 'luong_co_ban', 'phu_cap', 'muc_dong_bao_hiem', 'giam_tru_ban_than', 'so_nguoi_phu_thuoc')
+    @api.depends('ngay_cong_chuan', 'ngay_cong_thuc_te', 'so_gio_ot', 'so_gio_ot_thuong', 'so_gio_ot_cuoi_tuan', 'luong_co_ban', 'phu_cap', 'muc_dong_bao_hiem', 'giam_tru_ban_than', 'so_nguoi_phu_thuoc')
     def _compute_luong_chi_tiet(self):
         for record in self:
             # 1. Lương thực tế & Lương OT
             if record.ngay_cong_chuan > 0:
                 record.luong_thuc_te = (record.luong_co_ban / record.ngay_cong_chuan) * record.ngay_cong_thuc_te
-                record.luong_ot = (record.luong_co_ban / record.ngay_cong_chuan / 8.0) * record.so_gio_ot * 1.5
+                luong_ot_thuong = (record.luong_co_ban / record.ngay_cong_chuan / 8.0) * record.so_gio_ot_thuong * 1.5
+                luong_ot_cuoi_tuan = (record.luong_co_ban / record.ngay_cong_chuan / 8.0) * record.so_gio_ot_cuoi_tuan * 2.0
+                record.luong_ot = luong_ot_thuong + luong_ot_cuoi_tuan
             else:
                 record.luong_thuc_te = 0.0
                 record.luong_ot = 0.0
+                luong_ot_thuong = 0.0
+                luong_ot_cuoi_tuan = 0.0
                 
             # 2. Khấu trừ bảo hiểm
             emp = record.nhan_vien_id
@@ -96,13 +102,19 @@ class PhieuLuong(models.Model):
             lines_vals = [
                 (5, 0, 0),  # Xóa toàn bộ dòng cũ
                 (0, 0, {'name': 'Lương thực tế', 'code': 'BASIC_REAL', 'amount': record.luong_thuc_te, 'type': 'thu_nhap'}),
-                (0, 0, {'name': 'Lương làm thêm (OT)', 'code': 'OT', 'amount': record.luong_ot, 'type': 'thu_nhap'}),
+            ]
+            if luong_ot_thuong > 0:
+                lines_vals.append((0, 0, {'name': 'Lương làm thêm ngày thường (150%)', 'code': 'OT_NORMAL', 'amount': luong_ot_thuong, 'type': 'thu_nhap'}))
+            if luong_ot_cuoi_tuan > 0:
+                lines_vals.append((0, 0, {'name': 'Lương làm thêm cuối tuần (200%)', 'code': 'OT_WEEKEND', 'amount': luong_ot_cuoi_tuan, 'type': 'thu_nhap'}))
+            
+            lines_vals.extend([
                 (0, 0, {'name': 'Phụ cấp cố định', 'code': 'ALW', 'amount': record.phu_cap, 'type': 'thu_nhap'}),
                 (0, 0, {'name': 'Bảo hiểm Xã hội (BHXH)', 'code': 'SI', 'amount': record.tien_bhxh, 'type': 'khau_tru'}),
                 (0, 0, {'name': 'Bảo hiểm Y tế (BHYT)', 'code': 'HI', 'amount': record.tien_bhyt, 'type': 'khau_tru'}),
                 (0, 0, {'name': 'Bảo hiểm Thất nghiệp (BHTN)', 'code': 'UI', 'amount': record.tien_bhtn, 'type': 'khau_tru'}),
                 (0, 0, {'name': 'Thuế thu nhập cá nhân (TNCN)', 'code': 'PIT', 'amount': record.thue_tncn, 'type': 'khau_tru'}),
-            ]
+            ])
             record.line_ids = lines_vals
 
     def _calculate_progressive_pit(self, tntt):

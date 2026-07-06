@@ -47,8 +47,7 @@ class ChotCongThang(models.Model):
             
             if not attendance_records:
                 raise UserError(f"Không tìm thấy dữ liệu chấm công nào trong tháng {record.thang}/{record.nam} để chốt!")
-
-            # 2. Group by employee and aggregate workdays and OT hours
+            # 2. Group by employee and aggregate workdays and OT hours (weekday vs weekend)
             emp_attendance = {}
             for att in attendance_records:
                 emp_id = att.nhan_vien_id.id
@@ -56,6 +55,8 @@ class ChotCongThang(models.Model):
                     emp_attendance[emp_id] = {
                         'days': 0.0,
                         'ot': 0.0,
+                        'ot_thuong': 0.0,
+                        'ot_cuoi_tuan': 0.0,
                         'employee': att.nhan_vien_id
                     }
                 
@@ -72,8 +73,22 @@ class ChotCongThang(models.Model):
                 elif att.trang_thai == 'vang_mat':
                     multiplier = 0.0
                 
+                # Check weekend
+                date_val = att.ngay
+                if isinstance(date_val, str):
+                    date_val = datetime.datetime.strptime(date_val, '%Y-%m-%d').date()
+                
+                if date_val.weekday() in (5, 6): # 5=Sat, 6=Sun
+                    ot_cuoi_tuan = att.so_gio_ot
+                    ot_thuong = 0.0
+                else:
+                    ot_thuong = att.so_gio_ot
+                    ot_cuoi_tuan = 0.0
+                
                 emp_attendance[emp_id]['days'] += multiplier
                 emp_attendance[emp_id]['ot'] += att.so_gio_ot
+                emp_attendance[emp_id]['ot_thuong'] += ot_thuong
+                emp_attendance[emp_id]['ot_cuoi_tuan'] += ot_cuoi_tuan
 
             # 3. Create a payslip for each employee
             PhieuLuongObj = self.env['phieu_luong']
@@ -90,6 +105,8 @@ class ChotCongThang(models.Model):
                         'ngay_cong_chuan': record.ngay_cong_chuan,
                         'ngay_cong_thuc_te': data['days'],
                         'so_gio_ot': data['ot'],
+                        'so_gio_ot_thuong': data['ot_thuong'],
+                        'so_gio_ot_cuoi_tuan': data['ot_cuoi_tuan'],
                         'luong_co_ban': emp.luong_co_ban or 0.0,
                         'phu_cap': emp.phu_cap or 0.0,
                         'muc_dong_bao_hiem': emp.he_so_bao_hiem or 0.0,
@@ -103,6 +120,8 @@ class ChotCongThang(models.Model):
                         'ngay_cong_chuan': record.ngay_cong_chuan,
                         'ngay_cong_thuc_te': data['days'],
                         'so_gio_ot': data['ot'],
+                        'so_gio_ot_thuong': data['ot_thuong'],
+                        'so_gio_ot_cuoi_tuan': data['ot_cuoi_tuan'],
                         'luong_co_ban': emp.luong_co_ban or 0.0,
                         'phu_cap': emp.phu_cap or 0.0,
                         'muc_dong_bao_hiem': emp.he_so_bao_hiem or 0.0,

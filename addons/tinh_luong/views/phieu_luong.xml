@@ -47,6 +47,8 @@
                             <field name="ngay_cong_chuan"/>
                             <field name="ngay_cong_thuc_te"/>
                             <field name="so_gio_ot"/>
+                            <field name="so_gio_ot_thuong"/>
+                            <field name="so_gio_ot_cuoi_tuan"/>
                         </group>
                     </group>
                     <notebook>
