@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_chot_cong_thang_tree" model="ir.ui.view">
+        <field name="name">chot_cong_thang.tree</field>
+        <field name="model">chot_cong_thang</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="display_name"/>
+                <field name="thang"/>
+                <field name="nam"/>
+                <field name="ngay_cong_chuan"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_chot_cong_thang_form" model="ir.ui.view">
+        <field name="name">chot_cong_thang.form</field>
+        <field name="model">chot_cong_thang</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm_chot_cong" string="Chốt công tháng" 
+                            type="object" class="oe_highlight" states="draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="thang" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                            <field name="nam" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        </group>
+                        <group>
+                            <field name="ngay_cong_chuan" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_chot_cong_thang" model="ir.actions.act_window">
+        <field name="name">Chốt công tháng</field>
+        <field name="res_model">chot_cong_thang</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
