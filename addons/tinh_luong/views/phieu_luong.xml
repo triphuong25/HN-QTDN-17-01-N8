@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_phieu_luong_tree" model="ir.ui.view">
+        <field name="name">phieu_luong.tree</field>
+        <field name="model">phieu_luong</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" decoration-success="state == 'paid'">
+                <field name="display_name"/>
+                <field name="nhan_vien_id"/>
+                <field name="thang"/>
+                <field name="nam"/>
+                <field name="luong_thuc_te"/>
+                <field name="luong_ot"/>
+                <field name="tong_khau_tru"/>
+                <field name="thuc_linh"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_phieu_luong_form" model="ir.ui.view">
+        <field name="name">phieu_luong.form</field>
+        <field name="model">phieu_luong</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" string="Phê duyệt" type="object" class="oe_highlight" states="draft"/>
+                    <button name="action_pay" string="Thanh toán" type="object" class="oe_highlight" states="approved"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Thông tin chung">
+                            <field name="nhan_vien_id"/>
+                            <field name="thang"/>
+                            <field name="nam"/>
+                        </group>
+                        <group string="Thông tin công">
+                            <field name="ngay_cong_chuan"/>
+                            <field name="ngay_cong_thuc_te"/>
+                            <field name="so_gio_ot"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Chi tiết lương">
+                            <group col="2">
+                                <group string="Khoản nhận">
+                                    <field name="luong_co_ban"/>
+                                    <field name="luong_thuc_te"/>
+                                    <field name="luong_ot"/>
+                                    <field name="phu_cap"/>
+                                </group>
+                                <group string="Khấu trừ bảo hiểm">
+                                    <field name="muc_dong_bao_hiem"/>
+                                    <field name="tien_bhxh"/>
+                                    <field name="tien_bhyt"/>
+                                    <field name="tien_bhtn"/>
+                                    <field name="tong_khau_tru" style="font-weight: bold;"/>
+                                </group>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="thuc_linh" class="oe_subtotal_footer_separator" style="font-size: 1.5em; font-weight: bold;"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_phieu_luong" model="ir.actions.act_window">
+        <field name="name">Phiếu lương nhân viên</field>
+        <field name="res_model">phieu_luong</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

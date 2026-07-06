@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_tinh_luong_root" name="Tính lương" sequence="30" web_icon="tinh_luong,static/description/icon.png"/>
+    <menuitem id="menu_phieu_luong" name="Phiếu lương" parent="menu_tinh_luong_root" action="action_phieu_luong" sequence="10"/>
+</odoo>
