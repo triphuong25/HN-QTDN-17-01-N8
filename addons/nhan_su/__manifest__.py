@@ -36,5 +36,6 @@
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
+        'demo/nhan_vien_demo.xml',
     ],
 }

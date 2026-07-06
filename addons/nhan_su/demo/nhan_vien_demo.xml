@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="demo_nhan_vien_a" model="nhan_vien">
+            <field name="ho_ten_dem">Nguyễn Văn</field>
+            <field name="ten">A</field>
+            <field name="ma_dinh_danh">anv</field>
+            <field name="ngay_sinh">1995-05-15</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="phu_cap">1500000</field>
+            <field name="he_so_bao_hiem">6000000</field>
+        </record>
+
+        <record id="demo_nhan_vien_b" model="nhan_vien">
+            <field name="ho_ten_dem">Trần Thị</field>
+            <field name="ten">B</field>
+            <field name="ma_dinh_danh">btt</field>
+            <field name="ngay_sinh">1998-08-20</field>
+            <field name="luong_co_ban">15000000</field>
+            <field name="phu_cap">2000000</field>
+            <field name="he_so_bao_hiem">8000000</field>
+        </record>
+
+        <record id="demo_nhan_vien_c" model="nhan_vien">
+            <field name="ho_ten_dem">Lê Văn</field>
+            <field name="ten">C</field>
+            <field name="ma_dinh_danh">cnv</field>
+            <field name="ngay_sinh">2000-10-10</field>
+            <field name="luong_co_ban">9000000</field>
+            <field name="phu_cap">1000000</field>
+            <field name="he_so_bao_hiem">5000000</field>
+        </record>
+    </data>
+</odoo>

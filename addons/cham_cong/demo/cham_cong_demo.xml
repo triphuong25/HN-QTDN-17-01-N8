@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Nguyễn Văn A -->
+        <record id="demo_attendance_a_1" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">2.0</field>
+        </record>
+        <record id="demo_attendance_a_2" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_a_3" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">1.5</field>
+        </record>
+
+        <!-- Trần Thị B -->
+        <record id="demo_attendance_b_1" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_b_2" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="trang_thai">nua_ngay</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_b_3" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
+            <field name="trang_thai">nghi_co_luong</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+
+        <!-- Lê Văn C -->
+        <record id="demo_attendance_c_1" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_c_2" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="trang_thai">nghi_khong_luong</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_c_3" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_c"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-03')"/>
+            <field name="trang_thai">vang_mat</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+    </data>
+</odoo>
