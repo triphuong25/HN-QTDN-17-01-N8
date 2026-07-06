@@ -105,11 +105,36 @@
             </field>
         </record>
 
+        <!-- Search View -->
+        <record id="view_hop_dong_lao_dong_search" model="ir.ui.view">
+            <field name="name">hop_dong_lao_dong.search</field>
+            <field name="model">hop_dong_lao_dong</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm hợp đồng">
+                    <field name="name"/>
+                    <field name="nhan_vien_id"/>
+                    <separator/>
+                    <filter string="Đang hiệu lực" name="filter_hieu_luc" domain="[('trang_thai', '=', 'hieu_luc')]"/>
+                    <filter string="Nháp" name="filter_nhap" domain="[('trang_thai', '=', 'nhap')]"/>
+                    <filter string="Hết hạn" name="filter_het_han" domain="[('trang_thai', '=', 'het_han')]"/>
+                    <separator/>
+                    <filter string="Thử việc" name="filter_thu_viec" domain="[('loai_hop_dong', '=', 'thu_viec')]"/>
+                    <filter string="Chính thức" name="filter_chinh_thuc" domain="[('loai_hop_dong', '=', 'chinh_thuc')]"/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter string="Nhân viên" name="group_by_nhan_vien" context="{'group_by': 'nhan_vien_id'}"/>
+                        <filter string="Loại hợp đồng" name="group_by_loai_hop_dong" context="{'group_by': 'loai_hop_dong'}"/>
+                        <filter string="Trạng thái" name="group_by_trang_thai" context="{'group_by': 'trang_thai'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
         <!-- Action -->
         <record id="action_hop_dong_lao_dong" model="ir.actions.act_window">
             <field name="name">Hợp đồng Lao động</field>
             <field name="res_model">hop_dong_lao_dong</field>
             <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_hop_dong_lao_dong_search"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Tạo hợp đồng lao động đầu tiên cho nhân viên!

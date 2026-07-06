@@ -132,9 +132,58 @@
         </field>
     </record>
 
+    <record id="view_phieu_luong_search" model="ir.ui.view">
+        <field name="name">phieu_luong.search</field>
+        <field name="model">phieu_luong</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm phiếu lương">
+                <field name="nhan_vien_id"/>
+                <field name="thang"/>
+                <field name="nam"/>
+                <separator/>
+                <filter string="Chưa thanh toán (Nháp)" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Đã phê duyệt" name="state_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Đã thanh toán" name="state_paid" domain="[('state', '=', 'paid')]"/>
+                <separator/>
+                <group expand="0" string="Nhóm theo">
+                    <filter string="Nhân viên" name="group_by_nhan_vien" context="{'group_by': 'nhan_vien_id'}"/>
+                    <filter string="Tháng" name="group_by_thang" context="{'group_by': 'thang'}"/>
+                    <filter string="Năm" name="group_by_nam" context="{'group_by': 'nam'}"/>
+                    <filter string="Trạng thái" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_phieu_luong_graph" model="ir.ui.view">
+        <field name="name">phieu_luong.graph</field>
+        <field name="model">phieu_luong</field>
+        <field name="arch" type="xml">
+            <graph string="Phân tích Thực lĩnh nhân viên" type="bar">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="thuc_linh" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_phieu_luong_pivot" model="ir.ui.view">
+        <field name="name">phieu_luong.pivot</field>
+        <field name="model">phieu_luong</field>
+        <field name="arch" type="xml">
+            <pivot string="Báo cáo phân tích lương động">
+                <field name="nhan_vien_id" type="row"/>
+                <field name="thang" type="col"/>
+                <field name="thuc_linh" type="measure"/>
+                <field name="thue_tncn" type="measure"/>
+                <field name="tong_khau_tru" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <record id="action_phieu_luong" model="ir.actions.act_window">
         <field name="name">Phiếu lương nhân viên</field>
         <field name="res_model">phieu_luong</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_phieu_luong_search"/>
     </record>
 </odoo>
