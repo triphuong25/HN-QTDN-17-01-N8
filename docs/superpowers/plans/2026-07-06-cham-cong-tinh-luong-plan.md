@@ -659,3 +659,198 @@ Expected: Modules upgrade successfully.
 git add addons/cham_cong/models/chot_cong_thang.py
 git commit -m "feat(automation): implement chot_cong_thang trigger to automatically generate payslips"
 ```
+
+---
+
+### Task 5: Create Business Flow Diagram and Update README
+
+**Files:**
+- Create: `docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg`
+- Modify: `README.md`
+
+**Interfaces:**
+- Consumes: BPMN Swimlane conceptual flow.
+- Produces: Diagram file in repository and updated project documentation.
+
+- [ ] **Step 1: Write a python script to generate a beautiful SVG diagram**
+
+Create a temporary script `scratch/generate_flow_diagram.py` to output the business flow SVG.
+```python
+# scratch/generate_flow_diagram.py
+import os
+
+svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="1000" height="650" fill="#f8fafc" rx="10"/>
+  
+  <!-- Header -->
+  <text x="500" y="40" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#0f172a" text-anchor="middle">LUỒNG NGHIỆP VỤ CHẤM CÔNG VÀ TÍNH LƯƠNG TỰ ĐỘNG (NHÓM 08)</text>
+  
+  <!-- Swimlanes Headers -->
+  <rect x="20" y="80" width="160" height="120" fill="#e2e8f0" rx="5"/>
+  <text x="100" y="145" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Quản lý / HR</text>
+  
+  <rect x="20" y="210" width="160" height="120" fill="#e2e8f0" rx="5"/>
+  <text x="100" y="275" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Chấm công (Nghiệp vụ 1)</text>
+
+  <rect x="20" y="340" width="160" height="120" fill="#e2e8f0" rx="5"/>
+  <text x="100" y="405" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Hệ thống Odoo (Trigger)</text>
+
+  <rect x="20" y="470" width="160" height="120" fill="#e2e8f0" rx="5"/>
+  <text x="100" y="535" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Kế toán / Tính lương</text>
+
+  <!-- Flow Nodes -->
+  <!-- Lane: HR -->
+  <rect x="220" y="115" width="150" height="50" fill="#bae6fd" stroke="#0284c7" stroke-width="2" rx="8"/>
+  <text x="295" y="145" font-family="Arial, sans-serif" font-size="12" fill="#0369a1" text-anchor="middle" font-weight="bold">1. Tạo hồ sơ nhân viên</text>
+
+  <!-- Lane: Attendance -->
+  <rect x="420" y="245" width="150" height="50" fill="#fef08a" stroke="#ca8a04" stroke-width="2" rx="8"/>
+  <text x="495" y="275" font-family="Arial, sans-serif" font-size="12" fill="#854d0e" text-anchor="middle" font-weight="bold">2. Chấm công hàng ngày</text>
+
+  <rect x="620" y="245" width="150" height="50" fill="#fef08a" stroke="#ca8a04" stroke-width="2" rx="8"/>
+  <text x="695" y="275" font-family="Arial, sans-serif" font-size="12" fill="#854d0e" text-anchor="middle" font-weight="bold">3. Nhấn "Chốt công tháng"</text>
+
+  <!-- Lane: Odoo System -->
+  <rect x="620" y="375" width="150" height="50" fill="#bbf7d0" stroke="#16a34a" stroke-width="2" rx="8"/>
+  <text x="695" y="405" font-family="Arial, sans-serif" font-size="12" fill="#166534" text-anchor="middle" font-weight="bold">4. Quét công &amp; Tự tạo lương</text>
+
+  <!-- Lane: Accountant -->
+  <rect x="800" y="505" width="150" height="50" fill="#fbcfe8" stroke="#db2777" stroke-width="2" rx="8"/>
+  <text x="875" y="535" font-family="Arial, sans-serif" font-size="12" fill="#9d174d" text-anchor="middle" font-weight="bold">5. Duyệt &amp; Thanh toán</text>
+
+  <!-- Arrows -->
+  <line x1="370" y1="140" x2="395" y2="140" stroke="#64748b" stroke-width="2"/>
+  <line x1="395" y1="140" x2="395" y2="270" stroke="#64748b" stroke-width="2"/>
+  <line x1="395" y1="270" x2="420" y2="270" stroke="#64748b" stroke-width="2"/>
+  
+  <line x1="570" y1="270" x2="620" y2="270" stroke="#64748b" stroke-width="2"/>
+  <line x1="695" y1="295" x2="695" y2="375" stroke="#64748b" stroke-width="2"/>
+  <line x1="770" y1="400" x2="785" y2="400" stroke="#64748b" stroke-width="2"/>
+  <line x1="785" y1="400" x2="785" y2="530" stroke="#64748b" stroke-width="2"/>
+  <line x1="785" y1="530" x2="800" y2="530" stroke="#64748b" stroke-width="2"/>
+</svg>
+"""
+os.makedirs("docs/business-flow", exist_ok=True)
+with open("docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg", "w", encoding="utf-8") as f:
+    f.write(svg_content)
+```
+
+Run this script to generate the diagram.
+Run: `python scratch/generate_flow_diagram.py`
+Expected: File `docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg` is created successfully.
+
+- [ ] **Step 2: Update README.md to describe the integration and point to the diagram**
+
+Add a section at the bottom of `README.md` linking to the diagram and detailing the three modules' relationships.
+
+- [ ] **Step 3: Commit diagram and README**
+```bash
+git add docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg README.md
+git commit -m "docs(diagram): add Swimlane BPMN business flow diagram and update README"
+```
+
+---
+
+### Task 6: Add Odoo Demo Data
+
+**Files:**
+- Create: `addons/nhan_su/demo/nhan_vien_demo.xml`
+- Create: `addons/cham_cong/demo/cham_cong_demo.xml`
+- Modify: `addons/nhan_su/__manifest__.py`
+- Modify: `addons/cham_cong/__manifest__.py`
+
+**Interfaces:**
+- Consumes: Odoo standard demo data XML layout.
+- Produces: Pre-populated database records for testing.
+
+- [ ] **Step 1: Create Employee demo data**
+
+Create `addons/nhan_su/demo/nhan_vien_demo.xml`:
+```xml
+<odoo>
+    <data noupdate="1">
+        <record id="demo_nhan_vien_a" model="nhan_vien">
+            <field name="ho_ten_dem">Nguyễn Văn</field>
+            <field name="ten">A</field>
+            <field name="ma_dinh_danh">anv</field>
+            <field name="ngay_sinh">1995-05-15</field>
+            <field name="luong_co_ban">12000000</field>
+            <field name="phu_cap">1500000</field>
+            <field name="he_so_bao_hiem">6000000</field>
+        </record>
+
+        <record id="demo_nhan_vien_b" model="nhan_vien">
+            <field name="ho_ten_dem">Trần Thị</field>
+            <field name="ten">B</field>
+            <field name="ma_dinh_danh">btt</field>
+            <field name="ngay_sinh">1998-08-20</field>
+            <field name="luong_co_ban">15000000</field>
+            <field name="phu_cap">2000000</field>
+            <field name="he_so_bao_hiem">8000000</field>
+        </record>
+    </data>
+</odoo>
+```
+
+Update `addons/nhan_su/__manifest__.py` to load this in `demo`:
+```python
+    'demo': [
+        'demo/demo.xml',
+        'demo/nhan_vien_demo.xml',
+    ],
+```
+
+- [ ] **Step 2: Create Attendance demo data**
+
+Create `addons/cham_cong/demo/cham_cong_demo.xml`:
+```xml
+<odoo>
+    <data noupdate="1">
+        <record id="demo_attendance_a_1" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">2.0</field>
+        </record>
+        <record id="demo_attendance_a_2" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_a"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_b_1" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-01')"/>
+            <field name="trang_thai">di_lam</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+        <record id="demo_attendance_b_2" model="cham_cong_hang_ngay">
+            <field name="nhan_vien_id" ref="nhan_su.demo_nhan_vien_b"/>
+            <field name="ngay" eval="time.strftime('%Y-%m-02')"/>
+            <field name="trang_thai">nua_ngay</field>
+            <field name="so_gio_ot">0.0</field>
+        </record>
+    </data>
+</odoo>
+```
+
+Update `addons/cham_cong/__manifest__.py` to load this in `demo`:
+```python
+    'demo': [
+        'demo/cham_cong_demo.xml',
+    ],
+```
+
+- [ ] **Step 3: Update modules and verify demo data is loaded**
+
+Run Odoo with `--without-demo=` to ensure demo data loads.
+Run: `python odoo-bin.py -c odoo.conf -u nhan_su,cham_cong --stop-after-init`
+Expected: Demo data loads correctly without Odoo validation errors.
+
+- [ ] **Step 4: Commit changes**
+```bash
+git add addons/nhan_su/demo/nhan_vien_demo.xml addons/cham_cong/demo/cham_cong_demo.xml addons/nhan_su/__manifest__.py addons/cham_cong/__manifest__.py
+git commit -m "feat(demo): add XML demo data for employees and attendance logs"
+```
+

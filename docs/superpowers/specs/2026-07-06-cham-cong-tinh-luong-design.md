@@ -88,7 +88,24 @@ Sửa đổi model `nhan_vien` (trong [nhan_vien.py](file:///d:/TP/HN-QTDN-17-01
 
 ---
 
-## 4. Kế hoạch kiểm thử & Xác minh (Verification Plan)
+## 4. Minh chứng sản phẩm & Dữ liệu mẫu (Demo Data)
+
+### 4.1. Sơ đồ luồng nghiệp vụ (Business Flow)
+* **Tên file:** `docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.png` (hoặc `.pdf` / `.svg`)
+* **Kiểu sơ đồ:** Swimlane / BPMN mô tả các làn của các Actor (Nhân viên, Quản lý/HR, Hệ thống Odoo, Kế toán) với trigger "Chốt công tháng" tự động sinh phiếu lương bên module `tinh_luong`.
+* **Cập nhật README:** Thêm 1-2 dòng mô tả về sơ đồ luồng nghiệp vụ này tại `README.md` của repository.
+
+### 4.2. Dữ liệu mẫu (Demo Data trong Odoo)
+Chúng ta sẽ định nghĩa file dữ liệu mẫu (XML/CSV) trong thư mục `demo/` của từng module để khi cài đặt hoặc cập nhật hệ thống, Odoo tự động nạp dữ liệu mẫu:
+* **HRM (`nhan_su`):** Nạp sẵn thông tin chi tiết (Lương cơ bản, phụ cấp, bảo hiểm) cho 3 nhân viên mẫu:
+  * Nhân viên A: Nguyễn Văn A (Lương: 12M, Phụ cấp: 1.5M, BH: 6M)
+  * Nhân viên B: Trần Thị B (Lương: 15M, Phụ cấp: 2M, BH: 8M)
+  * Nhân viên C: Lê Văn C (Lương: 9M, Phụ cấp: 1M, BH: 5M)
+* **Chấm công (`cham_cong`):** Nạp sẵn các bản ghi chấm công hàng ngày cho cả 3 nhân viên trong tháng hiện tại (đi làm, nghỉ phép, tăng ca OT).
+
+---
+
+## 5. Kế hoạch kiểm thử & Xác minh (Verification Plan)
 1. **Tạo dữ liệu mẫu:** Tạo 3 nhân viên với các mức lương, phụ cấp và tỷ lệ đóng bảo hiểm khác nhau.
 2. **Chấm công mẫu:** 
    * Nhân viên A: Đi làm đầy đủ các ngày trong tháng, làm thêm 10 giờ OT.
@@ -100,3 +117,4 @@ Sửa đổi model `nhan_vien` (trong [nhan_vien.py](file:///d:/TP/HN-QTDN-17-01
    * Kiểm tra xem các phiếu lương tương ứng có tự động tạo ra bên module `tinh_luong` hay không.
 4. **Kiểm tra công thức:** 
    * Tính tay đối chiếu với số liệu tự động tính toán trên phiếu lương của từng nhân viên để kiểm tra tính chính xác của thuật toán.
+
