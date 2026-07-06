@@ -94,7 +94,17 @@ python3 odoo-bin.py -c odoo.conf -u all
 ```
 Người sử dụng truy cập theo đường dẫn _http://localhost:8069/_ để đăng nhập vào hệ thống.
 
-## 📝 5. License
+## 📝 5. Đề tài: Chấm công & Tính lương tự động (Nhóm 08)
+
+Hệ thống quản lý Chấm công và Tính lương tích hợp trực tiếp với module Quản lý nhân sự (HRM).
+
+### 5.1. Mô tả luồng nghiệp vụ tự động hóa (Mức 2)
+* Dữ liệu nhân sự mẫu được lưu gốc tại module HRM (`nhan_su`), lưu cấu hình lương cơ bản, phụ cấp và bảo hiểm.
+* Dữ liệu chấm công hàng ngày được ghi nhận tại module Chấm công (`cham_cong`).
+* Khi nhấn nút **"Chốt công tháng"** bên module Chấm công, hệ thống tự động tổng hợp số ngày đi làm, số giờ tăng ca (OT) của từng nhân viên và tạo các bản ghi phiếu lương tương ứng dạng Nháp (Draft) bên module Tính lương (`tinh_luong`).
+* Sơ đồ luồng nghiệp vụ chi tiết dạng Swimlane BPMN: [Nhom08_BusinessFlow_ChamCongTinhLuong.svg](./docs/business-flow/Nhom08_BusinessFlow_ChamCongTinhLuong.svg).
+
+## 📝 6. License
 
 © 2024 AIoTLab, Faculty of Information Technology, DaiNam University. All rights reserved.
 
