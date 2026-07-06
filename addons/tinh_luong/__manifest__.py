@@ -8,6 +8,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/phieu_luong.xml',
+        'views/report_phieu_luong.xml',
         'views/menu.xml',
     ],
     'installable': True,

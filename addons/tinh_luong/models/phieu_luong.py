@@ -76,9 +76,18 @@ class PhieuLuong(models.Model):
             pct_bhyt = emp.ty_le_bhyt if emp else 1.5
             pct_bhtn = emp.ty_le_bhtn if emp else 1.0
             
-            record.tien_bhxh = record.muc_dong_bao_hiem * (pct_bhxh / 100.0)
-            record.tien_bhyt = record.muc_dong_bao_hiem * (pct_bhyt / 100.0)
-            record.tien_bhtn = record.muc_dong_bao_hiem * (pct_bhtn / 100.0)
+            # Luật Việt Nam:
+            # - Trần đóng BHXH & BHYT = 20 lần lương cơ sở (20 * 2,340,000 = 46,800,000 VND)
+            # - Trần đóng BHTN = 20 lần lương tối thiểu vùng I (20 * 4,960,000 = 99,200,000 VND)
+            luong_co_so = 2340000.0
+            luong_tt_vung = 4960000.0
+            
+            base_bhxh_bhyt = min(record.muc_dong_bao_hiem, 20.0 * luong_co_so)
+            base_bhtn = min(record.muc_dong_bao_hiem, 20.0 * luong_tt_vung)
+            
+            record.tien_bhxh = base_bhxh_bhyt * (pct_bhxh / 100.0)
+            record.tien_bhyt = base_bhxh_bhyt * (pct_bhyt / 100.0)
+            record.tien_bhtn = base_bhtn * (pct_bhtn / 100.0)
             record.tong_khau_tru = record.tien_bhxh + record.tien_bhyt + record.tien_bhtn
             
             # 3. Tính thuế TNCN (Lũy tiến Việt Nam)

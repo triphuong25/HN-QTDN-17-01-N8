@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_phieu_luong" model="ir.actions.report">
+        <field name="name">In Phiếu lương</field>
+        <field name="model">phieu_luong</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tinh_luong.report_phieu_luong_template</field>
+        <field name="report_file">tinh_luong.report_phieu_luong_template</field>
+        <field name="binding_model_id" ref="model_phieu_luong"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_phieu_luong_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1e293b; padding: 20px;">
+                        <h2 class="text-center" style="margin-bottom: 25px; color: #1e3a8a; font-weight: bold; border-bottom: 3px solid #3b82f6; padding-bottom: 10px;">
+                            PHIẾU THANH TOÁN TIỀN LƯƠNG
+                        </h2>
+                        
+                        <div class="row" style="margin-bottom: 25px; font-size: 14px; line-height: 1.6;">
+                            <div class="col-6">
+                                <strong>Nhân viên:</strong> <span t-field="o.nhan_vien_id.ho_va_ten"/><br/>
+                                <strong>Mã nhân viên:</strong> <span t-field="o.nhan_vien_id.ma_dinh_danh"/><br/>
+                                <strong>Số người phụ thuộc:</strong> <span t-field="o.so_nguoi_phu_thuoc"/>
+                            </div>
+                            <div class="col-6 text-right" style="text-align: right;">
+                                <strong>Kỳ tính lương:</strong> Tháng <span t-field="o.thang"/> / Năm <span t-field="o.nam"/><br/>
+                                <strong>Số ngày công chuẩn:</strong> <span t-field="o.ngay_cong_chuan"/><br/>
+                                <strong>Số ngày công thực tế:</strong> <span t-field="o.ngay_cong_thuc_te"/>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #2563eb; font-weight: bold; border-left: 4px solid #2563eb; padding-left: 10px; margin-bottom: 15px;">
+                            Chi tiết lương &amp; Khấu trừ
+                        </h4>
+                        
+                        <table class="table table-bordered table-sm" style="font-size: 13px; width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                            <thead>
+                                <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+                                    <th style="width: 50%; padding: 8px; border: 1px solid #cbd5e1;">Tên khoản mục</th>
+                                    <th style="width: 25%; padding: 8px; border: 1px solid #cbd5e1; text-align: right;">Số tiền (VND)</th>
+                                    <th style="width: 25%; padding: 8px; border: 1px solid #cbd5e1;">Phân loại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 8px; border: 1px solid #cbd5e1;"><span t-field="line.name"/></td>
+                                        <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: 500;">
+                                            <span t-esc="line.amount" t-options='{"widget": "monetary", "display_currency": o.env.company.currency_id or o.env.ref("base.VND")}'/>
+                                        </td>
+                                        <td style="padding: 8px; border: 1px solid #cbd5e1;">
+                                            <t t-if="line.type == 'thu_nhap'">
+                                                <span class="badge badge-success" style="background-color: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Thu nhập (+)</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger" style="background-color: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Khấu trừ (-)</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="background-color: #eff6ff; font-weight: bold; font-size: 15px; border-top: 2px solid #3b82f6;">
+                                    <td style="padding: 10px; border: 1px solid #cbd5e1; color: #1e3a8a;">Thực lĩnh thực tế (NET)</td>
+                                    <td style="padding: 10px; border: 1px solid #cbd5e1; text-align: right; color: #1d4ed8;">
+                                        <span t-esc="o.thuc_linh" t-options='{"widget": "monetary", "display_currency": o.env.company.currency_id or o.env.ref("base.VND")}'/>
+                                    </td>
+                                    <td style="padding: 10px; border: 1px solid #cbd5e1;">
+                                        <span class="badge badge-primary" style="background-color: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 4px; font-weight: bold;">Thực nhận</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="row" style="margin-top: 60px; font-size: 14px;">
+                            <div class="col-6" style="display: inline-block; width: 50%; text-align: center;">
+                                <strong>Người lập biểu</strong><br/>
+                                <span style="font-size: 12px; color: #64748b; font-style: italic;">(Ký, ghi rõ họ tên)</span>
+                            </div>
+                            <div class="col-6" style="display: inline-block; width: 50%; text-align: right; text-align: center;">
+                                <strong>Người nhận lương</strong><br/>
+                                <span style="font-size: 12px; color: #64748b; font-style: italic;">(Ký, ghi rõ họ tên)</span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
