@@ -33,6 +33,12 @@ class NhanVien(models.Model):
                                         compute="so_nguoi_bang_tuoi",
                                         store=True
                                         )
+    luong_co_ban = fields.Float(string="Lương cơ bản (VND)")
+    phu_cap = fields.Float(string="Phụ cấp cố định (VND)")
+    he_so_bao_hiem = fields.Float(string="Mức đóng bảo hiểm (VND)")
+    ty_le_bhxh = fields.Float(string="Tỷ lệ đóng BHXH (%)", default=8.0)
+    ty_le_bhyt = fields.Float(string="Tỷ lệ đóng BHYT (%)", default=1.5)
+    ty_le_bhtn = fields.Float(string="Tỷ lệ đóng BHTN (%)", default=1.0)
     
     @api.depends("tuoi")
     def _compute_so_nguoi_bang_tuoi(self):

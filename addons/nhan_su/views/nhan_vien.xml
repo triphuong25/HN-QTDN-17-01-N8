@@ -27,6 +27,20 @@
                             <page string="Danh sách chứng chỉ bằng cấp">
                                 <field name="danh_sach_chung_chi_bang_cap_ids"/>
                             </page>
+                            <page string="Lương &amp; Bảo hiểm">
+                                <group col="2">
+                                    <group string="Thông tin Lương">
+                                        <field name="luong_co_ban"/>
+                                        <field name="phu_cap"/>
+                                    </group>
+                                    <group string="Thông tin Bảo hiểm">
+                                        <field name="he_so_bao_hiem"/>
+                                        <field name="ty_le_bhxh"/>
+                                        <field name="ty_le_bhyt"/>
+                                        <field name="ty_le_bhtn"/>
+                                    </group>
+                                </group>
+                            </page>
                         </notebook>
                     </sheet>
                     
@@ -48,6 +62,7 @@
                     <field name="so_nguoi_bang_tuoi"/>
                     <field name="que_quan"/>
                     <field name="email"/>
+                    <field name="luong_co_ban"/>
                 </tree>
             </field>
         </record>
