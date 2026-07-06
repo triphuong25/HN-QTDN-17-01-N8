@@ -38,9 +38,23 @@
                                         <field name="ty_le_bhxh"/>
                                         <field name="ty_le_bhyt"/>
                                         <field name="ty_le_bhtn"/>
-                                        <field name="so_nguoi_phu_thuoc"/>
+                                        <field name="so_nguoi_phu_thuoc" readonly="1"/>
                                     </group>
                                 </group>
+                            </page>
+                            <page string="Người phụ thuộc">
+                                <field name="phu_thuoc_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="ngay_sinh"/>
+                                        <field name="moi_quan_he"/>
+                                        <field name="ma_so_thue"/>
+                                        <field name="trang_thai" widget="badge"
+                                               decoration-muted="trang_thai == 'nhap'"
+                                               decoration-success="trang_thai == 'hieu_luc'"
+                                               decoration-danger="trang_thai == 'het_han'"/>
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Hợp đồng Lao động">
                                 <field name="hop_dong_ids" context="{'default_nhan_vien_id': active_id}">

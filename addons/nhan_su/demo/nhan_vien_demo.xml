@@ -7,7 +7,16 @@
             <field name="ten">A</field>
             <field name="ma_dinh_danh">anv</field>
             <field name="ngay_sinh">1995-05-15</field>
-            <field name="so_nguoi_phu_thuoc">1</field>
+        </record>
+
+        <!-- Người phụ thuộc của Nguyễn Văn A -->
+        <record id="demo_phu_thuoc_a_1" model="nhan_vien_phu_thuoc">
+            <field name="nhan_vien_id" ref="demo_nhan_vien_a"/>
+            <field name="name">Nguyễn Văn Con A</field>
+            <field name="ngay_sinh">2020-06-15</field>
+            <field name="moi_quan_he">con_ruot</field>
+            <field name="ma_so_thue">8123456789</field>
+            <field name="trang_thai">hieu_luc</field>
         </record>
 
         <record id="demo_hop_dong_a" model="hop_dong_lao_dong">
@@ -27,7 +36,6 @@
             <field name="ten">B</field>
             <field name="ma_dinh_danh">btt</field>
             <field name="ngay_sinh">1998-08-20</field>
-            <field name="so_nguoi_phu_thuoc">0</field>
         </record>
 
         <record id="demo_hop_dong_b" model="hop_dong_lao_dong">

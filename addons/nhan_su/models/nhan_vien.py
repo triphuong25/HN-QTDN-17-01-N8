@@ -39,7 +39,8 @@ class NhanVien(models.Model):
     ty_le_bhxh = fields.Float(string="Tỷ lệ đóng BHXH (%)", default=8.0)
     ty_le_bhyt = fields.Float(string="Tỷ lệ đóng BHYT (%)", default=1.5)
     ty_le_bhtn = fields.Float(string="Tỷ lệ đóng BHTN (%)", default=1.0)
-    so_nguoi_phu_thuoc = fields.Integer(string="Số người phụ thuộc", default=0)
+    phu_thuoc_ids = fields.One2many("nhan_vien_phu_thuoc", "nhan_vien_id", string="Danh sách người phụ thuộc")
+    so_nguoi_phu_thuoc = fields.Integer(string="Số người phụ thuộc", compute="_compute_so_nguoi_phu_thuoc", store=True, default=0)
     hop_dong_ids = fields.One2many("hop_dong_lao_dong", "nhan_vien_id", string="Danh sách hợp đồng")
     
     @api.depends('hop_dong_ids.trang_thai', 'hop_dong_ids.luong_co_ban', 'hop_dong_ids.phu_cap', 'hop_dong_ids.he_so_bao_hiem')
@@ -99,3 +100,30 @@ class NhanVien(models.Model):
         for record in self:
             if record.tuoi < 18:
                 raise ValidationError("Tuổi không được bé hơn 18")
+
+    @api.depends('phu_thuoc_ids.trang_thai')
+    def _compute_so_nguoi_phu_thuoc(self):
+        for record in self:
+            active_dependents = record.phu_thuoc_ids.filtered(lambda d: d.trang_thai == 'hieu_luc')
+            record.so_nguoi_phu_thuoc = len(active_dependents)
+
+
+class NhanVienPhuThuoc(models.Model):
+    _name = 'nhan_vien_phu_thuoc'
+    _description = 'Người phụ thuộc của nhân viên'
+
+    nhan_vien_id = fields.Many2one('nhan_vien', string="Nhân viên", ondelete='cascade')
+    name = fields.Char(string="Họ tên người phụ thuộc", required=True)
+    ngay_sinh = fields.Date(string="Ngày sinh")
+    moi_quan_he = fields.Selection([
+        ('con_ruot', 'Con ruột'),
+        ('vo_chong', 'Vợ / Chồng'),
+        ('bo_me', 'Bố / Mẹ'),
+        ('khac', 'Khác')
+    ], string="Mối quan hệ", default='con_ruot', required=True)
+    ma_so_thue = fields.Char(string="Mã số thuế")
+    trang_thai = fields.Selection([
+        ('nhap', 'Nháp'),
+        ('hieu_luc', 'Có hiệu lực'),
+        ('het_han', 'Hết hạn')
+    ], string="Trạng thái", default='hieu_luc', required=True)
